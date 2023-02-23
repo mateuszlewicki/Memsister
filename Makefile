@@ -32,6 +32,7 @@ configure-env:
 
 configure-systemd:
 	@echo "Generating memsister.service file"
+	cp memsister.service.example memsister.service 
 	sed -i 's!\(EnvironmentFile\)=/usr/local/memcached/memsister.env!\1=$(DEST_DIR)/memsister.env!' memsister.service 
 	sed -i 's!\(ExecStart=/usr/bin/python3\) /usr/local/memcached/memsister!\1 $(DEST_DIR)/memsister!' memsister.service 
 	@echo "Generation complete"
