@@ -131,6 +131,8 @@ def main() -> None:
             time.sleep(args.interval)
             continue
 
+        logging.info('### SCAN START ###')
+            
         for filename in os.listdir(args.directory):
             if not filename.endswith("_old") and filename.endswith(".base"):
                 file_path = os.path.join(args.directory, filename)
@@ -146,8 +148,8 @@ def main() -> None:
                         os.rename(
                             file_path, os.path.join(args.directory, filename + "_old")
                         )
-            else:
-                logging.info('No new files found. waiting %is', args.interval)
+                        
+        logging.info('### SCAN STOP ###')
         time.sleep(args.interval)
 
 
