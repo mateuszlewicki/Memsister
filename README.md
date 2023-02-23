@@ -8,6 +8,20 @@ LOGFILE ?= "memsister.log"
 SKIP_PIP ?= 0
 ```
 
+Requirements:
+Python3.8
+Memcached
+cacheFiles with list of keys|values
+
+--- 
+Struct of memcahced kv pair
+`nameOfFile_key = values`
+
+---
+Struct of cacheFile.base
+`key|values`
+
+---
 INSTALL on destination system
 
 `make install`
