@@ -15,10 +15,12 @@ cacheFiles with list of keys|values
 
 --- 
 Struct of memcahced kv pair
+
 `nameOfFile_key = values`
 
 ---
 Struct of cacheFile.base
+
 `key|values`
 
 ---
