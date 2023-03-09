@@ -7,6 +7,8 @@ import logging
 import logging.handlers
 from pymemcache.client import Client
 
+VERSION = "1.0.1"
+
 MEMSISTER_WATCH_DIRECTORY: str = "."
 MEMSISTER_MEMCACHED_SERVER: str = "127.0.0.1:11211"
 MEMSISTER_INTERVAL: int = "60"
@@ -132,23 +134,24 @@ def main() -> None:
             continue
 
         logging.info('### SCAN START ###')
-            
-        for filename in os.listdir(args.directory):
-            if not filename.endswith("_old") and filename.endswith(".base"):
-                file_path = os.path.join(args.directory, filename)
-                if os.path.isfile(file_path):
-                    current_checksum = calculate_checksum(file_path)
-                    previous_checksum = memc.get(filename + "_checksum")
-                    if (
-                        previous_checksum is None
-                        or previous_checksum != current_checksum
-                    ):
-                        upload_to_memcached(memc, file_path)
-                        memc.set(filename + "_checksum", current_checksum)
-                        os.rename(
-                            file_path, os.path.join(args.directory, filename + "_old")
-                        )
-                        
+        try:
+            for filename in os.listdir(args.directory):
+                if not filename.endswith("_old") and filename.endswith(".base"):
+                    file_path = os.path.join(args.directory, filename)
+                    if os.path.isfile(file_path):
+                        current_checksum = calculate_checksum(file_path)
+                        previous_checksum = memc.get(filename + "_checksum")
+                        if (
+                            previous_checksum is None
+                            or previous_checksum != current_checksum
+                        ):
+                            upload_to_memcached(memc, file_path)
+                            memc.set(filename + "_checksum", current_checksum)
+                            os.rename(
+                                file_path, os.path.join(args.directory, filename + "_old")
+                            )
+        except FileNotFoundError as fnfe:
+            logging.error(fnfe)
         logging.info('### SCAN STOP ###')
         time.sleep(args.interval)
 
