@@ -20,6 +20,13 @@ endif
 	systemctl daemon-reload
 	@echo "Installation complete."
 
+update:
+	@echo "Updating Memsister in $(DEST_DIR)"
+	rm $(DEST_DIR)/memsister
+	install -C -m 755 memsister.py $(DEST_DIR)/memsister
+	systemctl restart memsister
+	@echo "Update complete."
+
 configure: configure-env configure-systemd
 
 configure-env:
@@ -50,4 +57,6 @@ uninstall:
 	systemctl daemon-reload
 	@echo "Uninstallation complete."
 
-.PHONY: uninstall update-env-file configure-env configure-systemd configure
+clean: uninstall
+
+.PHONY: clean uninstall update-env-file configure-env configure-systemd configure update
